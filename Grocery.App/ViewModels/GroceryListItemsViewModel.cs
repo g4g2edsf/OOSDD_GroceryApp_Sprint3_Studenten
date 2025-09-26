@@ -86,5 +86,19 @@ namespace Grocery.App.ViewModels
             }
         }
 
+        [RelayCommand]
+        public void SearchProductInBasket(string productName)
+        {
+            MyGroceryListItems.Clear();
+            var allProducts = _productService.GetAll();
+    
+            foreach (var item in _groceryListItemsService.GetAllOnGroceryListId(GroceryList.Id))
+            {
+                var product = allProducts.FirstOrDefault(p => p.Id == item.ProductId);
+                if (product != null && (productName == null || product.Name.ToLower().Contains(productName.ToLower())))
+                    MyGroceryListItems.Add(item);
+            }
+        }
+
     }
 }
