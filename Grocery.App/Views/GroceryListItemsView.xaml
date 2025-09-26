@@ -24,7 +24,10 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" Stroke="#C49B33" StrokeThickness="4" Padding="10" Margin="10" HorizontalOptions="Center">
-            <CollectionView ItemsSource="{Binding MyGroceryListItems}" Margin="20" HorizontalOptions="Center" EmptyView="De boodschappenlijst is nog leeg. Voeg eerst boodschappen toe!">
+            <VerticalStackLayout>
+                <SearchBar Placeholder="Zoek naar een product" x:Name="SearchBar" SearchCommand="{Binding SearchProductInBasketCommand}" SearchCommandParameter="{Binding Text, x:DataType='SearchBar', Source={x:Reference SearchBar}}" />
+
+                <CollectionView ItemsSource="{Binding MyGroceryListItems}" Margin="20" HorizontalOptions="Center" EmptyView="De boodschappenlijst is nog leeg. Voeg eerst boodschappen toe!">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
@@ -50,10 +53,13 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            </VerticalStackLayout>
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1" Stroke="#C49B33" StrokeThickness="4" Padding="5" Margin="5" HorizontalOptions="Center">
             <StackLayout>
+                <SearchBar Placeholder="Zoek naar een product" x:Name="SearchBar" SearchCommand="{Binding SearchProductCommand}" SearchCommandParameter="{Binding Text, x:DataType='SearchBar', Source={x:Reference SearchBar}}" />
+            
                 <CollectionView ItemsSource="{Binding AvailableProducts}" Margin="5" WidthRequest="300" HorizontalOptions="Start"
                     SelectionMode="Single"
                     SelectionChangedCommand="{Binding AddProductCommand}"

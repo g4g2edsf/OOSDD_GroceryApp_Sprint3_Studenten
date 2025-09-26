@@ -39,11 +39,11 @@ namespace Grocery.App.ViewModels
             GetAvailableProducts();
         }
 
-        private void GetAvailableProducts()
+        private void GetAvailableProducts(string? productName = null)
         {
             AvailableProducts.Clear();
             foreach (Product p in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0)
+                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0 && (productName == null || p.Name.ToLower().Contains(productName.ToLower())))
                     AvailableProducts.Add(p);
         }
 
@@ -83,6 +83,26 @@ namespace Grocery.App.ViewModels
             catch (Exception ex)
             {
                 await Toast.Make($"Opslaan mislukt: {ex.Message}").Show(cancellationToken);
+            }
+        }
+        
+        [RelayCommand]
+        public void SearchProduct(string productName)
+        {
+            GetAvailableProducts(productName);
+        }
+
+        [RelayCommand]
+        public void SearchProductInBasket(string productName)
+        {
+            MyGroceryListItems.Clear();
+            var allProducts = _productService.GetAll();
+    
+            foreach (var item in _groceryListItemsService.GetAllOnGroceryListId(GroceryList.Id))
+            {
+                var product = allProducts.FirstOrDefault(p => p.Id == item.ProductId);
+                if (product != null && (productName == null || product.Name.ToLower().Contains(productName.ToLower())))
+                    MyGroceryListItems.Add(item);
             }
         }
 
