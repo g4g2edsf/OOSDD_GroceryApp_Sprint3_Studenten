@@ -39,7 +39,7 @@ namespace Grocery.App.ViewModels
             GetAvailableProducts();
         }
 
-        private void GetAvailableProducts()
+        private void GetAvailableProducts(string? productSearch = null)
         {
             AvailableProducts.Clear();
             foreach (Product p in _productService.GetAll())
@@ -84,6 +84,12 @@ namespace Grocery.App.ViewModels
             {
                 await Toast.Make($"Opslaan mislukt: {ex.Message}").Show(cancellationToken);
             }
+        }
+        
+        [RelayCommand]
+        public void SearchProduct(string productName)
+        {
+            GetAvailableProducts(productName);
         }
 
     }
